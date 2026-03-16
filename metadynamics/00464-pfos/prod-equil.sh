@@ -1,0 +1,39 @@
+#!/bin/sh
+# email on start, end, and abortion
+#SBATCH --job-name=rigid-pbMetaD
+##SBATCH --output=out.out
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=sachar@rcc.uchicago.edu
+#SBATCH --partition=gpu
+#SBATCH --account=pi-andrewferguson
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=30:00:00
+
+OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+shopt -s expand_aliases
+source ~/.bashrc
+prepgmx
+export PATH="/project2/andrewferguson/maxtopel/software/enhancements/plumed-2.8.1/installed-files/bin:$PATH"
+export LD_LIBRARY_PATH="/project2/andrewferguson/maxtopel/software/enhancements/plumed-2.8.1/installed-files/lib:$LD_LIBRARY_PATH"
+
+# energy minimization
+gmx grompp -f emin.mdp -c sys-neutral.gro -p sys.top -po sys-out.mdp -o sys.tpr -maxwarn 6 -r sys-neutral.gro
+gmx mdrun -s sys.tpr -deffnm sys-emin -nb gpu -pin on -ntomp $OMP_NUM_THREADS
+
+#equilibration
+gmx grompp -f equil.mdp -c sys-emin.gro -p sys.top -po sys-equil-out.mdp -o sys-equil.tpr -maxwarn 6 -r sys-neutral.gro
+gmx mdrun -s sys-equil.tpr -deffnm sys-equil -nb gpu -pin on -ntomp $OMP_NUM_THREADS
+
+#NPT equilibration
+gmx grompp -f equil-npt.mdp -c sys-equil.gro -p sys.top -po sys-equil-npt-out.mdp -o sys-equil-npt.tpr -maxwarn 6 -r sys-neutral.gro
+gmx mdrun -s sys-equil-npt.tpr -deffnm sys-equil-npt -nb gpu -pin on -ntomp $OMP_NUM_THREADS
+
+## Production run
+gmx grompp -f prod.mdp -c  sys-equil-npt.gro -r sys-equil-npt.gro  -p sys.top -po sys-prod-out.mdp -o sys-prod.tpr -maxwarn 6
+
+gmx mdrun -ntomp $OMP_NUM_THREADS -pin on -nb gpu -s sys-prod.tpr -deffnm sys-prod -nice 1 -plumed plumed.dat
+
