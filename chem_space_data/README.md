@@ -85,9 +85,9 @@ The files in `prim_cleaved_structs/` are helpful when generating or modifying ca
 
 ## Relationship To Other Directories
 
-- `chem_space.pkl` here is the same kind of dataset referenced in [`bayesianoptimization/data`](/home/siddarthachar/pfos/gpr/publication/github/bayesianoptimization/data).
+- `chem_space.pkl` here is the same kind of dataset referenced in [`bayesianoptimization/data`](../bayesianoptimization/data/).
 - The structure library in `chem_space_pdb_files/` mirrors the same candidate-ID style used by `bayesianoptimization/data/chem_space_structures/`.
-- This directory is data-focused; model fitting and candidate ranking happen in [`bayesianoptimization`](/home/siddarthachar/pfos/gpr/publication/github/bayesianoptimization).
+- This directory is data-focused; model fitting and candidate ranking happen in [`bayesianoptimization`](../bayesianoptimization/).
 
 ## Requirements
 
