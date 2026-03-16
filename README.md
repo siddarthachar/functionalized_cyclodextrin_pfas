@@ -22,7 +22,7 @@ Per- and polyfluoroalkyl substances (PFAS) are persistent environmental contamin
 
 ## Repository Overview
 
-The repository is organized into three main parts:
+The repository is organized into four main parts:
 
 ### [`chem_space_data/`](chem_space_data/)
 
@@ -57,11 +57,22 @@ Gaussian-process and candidate-ranking utilities used to connect descriptors and
 
 This is the best starting point if you want to inspect the surrogate-modeling and candidate-selection components.
 
+### [`lasso/`](lasso/)
+
+Descriptor-analysis notebook for sparse, interpretable regression on the screened chemical space.
+
+- `lasso.ipynb` loads `chem_space.pkl`
+- computes RDKit molecular descriptors and charge-based features for substituent sets
+- supports feature selection and regression-style analysis alongside the Bayesian-optimization workflow
+
+This is the best starting point if you want a more interpretable descriptor-based model rather than the Gaussian-process workflow.
+
 ## Suggested Entry Points
 
 - Start with [`chem_space_data/README.md`](chem_space_data/README.md) to understand the screened library and stored structures.
 - Read [`metadynamics/README.md`](metadynamics/README.md) for the simulation setup and analysis workflow.
 - Read [`bayesianoptimization/README.md`](bayesianoptimization/README.md) for the GP modeling and prioritization workflow.
+- Open [`lasso/lasso.ipynb`](lasso/lasso.ipynb) for descriptor extraction and sparse regression analysis.
 
 ## Notes
 
