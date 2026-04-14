@@ -2,7 +2,7 @@
 
 [![DOI](https://img.shields.io/badge/DOI-pending-lightgrey)](#citation)
 
-![Table of contents graphic](images/toc_scale.jpg)
+![Table of contents graphic](toc_scale.jpg)
 
 This repository contains the computational assets associated with a study on cyclodextrin-based molecular recognition of PFAS, with an emphasis on improving PFOS selectivity over structurally similar surfactants such as SDS.
 
