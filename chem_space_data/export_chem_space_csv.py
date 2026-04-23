@@ -19,6 +19,7 @@ def to_json_string(value):
 def export_csv(chem_space, output_path):
     fieldnames = [
         "probe ID",
+        "CD type",
         "primary",
         "secondary",
         "dG_md",
@@ -38,6 +39,7 @@ def export_csv(chem_space, output_path):
             writer.writerow(
                 {
                     "probe ID": probe_id,
+                    "CD type": entry.get("CD", ""),
                     "primary": to_json_string(entry.get("primary")),
                     "secondary": to_json_string(entry.get("secondary")),
                     "dG_md": to_json_string(entry.get("dG_md")),

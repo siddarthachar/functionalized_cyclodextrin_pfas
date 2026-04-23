@@ -29,6 +29,7 @@ The repository is organized into four main parts:
 Chemical-space datasets and structure libraries for the screened cyclodextrin hosts.
 
 - `chem_space.pkl` stores the enumerated library and associated thermodynamic and descriptor fields.
+- `chem_space_export.csv` is a tabular export of selected screened candidates for quick inspection outside Python.
 - `chem_space_pdb_files/` contains the candidate 3D structures as PDB files.
 - `prim_cleaved_structs/` contains reference alpha-, beta-, and gamma-cyclodextrin scaffolds.
 - `analyze_chem_space.py` provides a lightweight way to inspect the dataset contents.
@@ -66,6 +67,48 @@ Descriptor-analysis notebook for sparse, interpretable regression on the screene
 - supports feature selection and regression-style analysis alongside the Bayesian-optimization workflow
 
 This is the best starting point if you want a more interpretable descriptor-based model rather than the Gaussian-process workflow.
+
+## How To Read The CSV
+
+The file [`chem_space_data/chem_space_export.csv`](chem_space_data/chem_space_export.csv) is a compact export of selected probe designs. It currently contains 79 probe entries plus a header row.
+
+The columns are:
+
+- `probe ID`
+  Repository-style identifier for the candidate, matching the numeric naming convention used elsewhere in the chemical-space data.
+- `CD type`
+  Cyclodextrin family for the probe, reported as `alpha-CD`, `beta-CD`, or `gamma-CD`.
+- `primary`
+  A string-encoded list of substituents on the primary face of the cyclodextrin. These entries are written as SMILES-like fragments inside a Python-style list.
+- `secondary`
+  A string-encoded list of substituents on the secondary face of the cyclodextrin, in the same format.
+- `dG_md`
+  MD-derived PFOS binding free energy stored as `[mean, uncertainty]`.
+- `ddG_md`
+  Relative selectivity-style free energy term, also stored as `[mean, uncertainty]`.
+- `Kd_md`
+  Dissociation constant for PFOS from the MD workflow, stored as `[mean, uncertainty]`.
+- `Kd_SDS/Kd_PFOS`
+  Selectivity ratio between SDS and PFOS binding, stored as `[mean, uncertainty]`. Larger values indicate stronger preference for PFOS over SDS.
+
+Two formatting details are important:
+
+- The `primary` and `secondary` columns are not plain text labels. They are serialized lists of substituent strings.
+- The thermodynamic columns are not single numbers. Each cell is a two-element array, where the first value is the central estimate and the second value is the uncertainty.
+
+Example interpretation of one row:
+
+- `probe ID = 00001`
+- `CD type = gamma-CD`
+  This probe is built on a gamma-cyclodextrin scaffold.
+- `primary = ["[Br]", ...]`
+  Every primary-site substituent in that candidate is bromine.
+- `secondary = ["[OH]", ...]`
+  The secondary sites remain hydroxylated.
+- `dG_md = [-31.52, 0.40]`
+  Mean binding free energy of about `-31.5` with uncertainty `0.4` in the stored units.
+- `Kd_SDS/Kd_PFOS = [22.5, 8.8]`
+  SDS is predicted to bind more weakly than PFOS by roughly a factor of `22.5`, with the listed uncertainty.
 
 ## Suggested Entry Points
 
